@@ -1,13 +1,14 @@
 <?php
+
 /**
  * PrivateBin
  *
- * a zero-knowledge paste bin
+ * A zero-knowledge paste bin
  *
- * @link      https://github.com/PrivateBin/PrivateBin
  * @copyright 2012 Sébastien SAUVAGE (sebsauvage.net)
- * @license   https://www.opensource.org/licenses/zlib-license.php The zlib/libpng License
+ * @license   https://www.opensource.org/licenses/zlib-license.php
  * @version   1.5.1
+ * @link      https://github.com/PrivateBin/PrivateBin
  */
 
 namespace PrivateBin;
@@ -17,7 +18,7 @@ use Exception;
 /**
  * Request
  *
- * parses request parameters and provides helper functions for routing
+ * Parses request parameters and provides helper functions for routing
  */
 class Request
 {
@@ -225,7 +226,7 @@ class Request
         return array_key_exists('REQUEST_URI', $_SERVER) ?
         htmlspecialchars(
             parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH)
-            ) : '/';
+        ) : '/';
     }
 
     /**
@@ -279,10 +280,13 @@ class Request
         if ($hasAcceptHeader) {
             $mediaTypeRanges = explode(',', trim($acceptHeader));
             foreach ($mediaTypeRanges as $mediaTypeRange) {
-                if (preg_match(
-                    '#(\*/\*|[a-z\-]+/[a-z\-+*]+(?:\s*;\s*[^q]\S*)*)(?:\s*;\s*q\s*=\s*(0(?:\.\d{0,3})|1(?:\.0{0,3})))?#',
-                    trim($mediaTypeRange), $match
-                )) {
+                if (
+                    preg_match(
+                        '#(\*/\*|[a-z\-]+/[a-z\-+*]+(?:\s*;\s*[^q]\S*)*)(?:\s*;\s*q\s*=\s*(0(?:\.\d{0,3})|1(?:\.0{0,3})))?#',
+                        trim($mediaTypeRange),
+                        $match
+                    )
+                ) {
                     if (!isset($match[2])) {
                         $match[2] = '1.0';
                     } else {
