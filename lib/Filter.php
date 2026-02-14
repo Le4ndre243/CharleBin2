@@ -22,32 +22,37 @@ use Exception;
 class Filter
 {
     /**
-     * format a given time string into a human readable label (localized)
+     * format a given time into a human readable label (localized)
      *
-     * accepts times in the format "[integer][time unit]"
+     * This implementation requires two arguments: an integer value and a unit
+     * string (for example `5, 'min'`). It does not perform legacy string
+     * parsing; callers must pass separated arguments.
      *
      * @access public
      * @static
-     * @param  string $time
+     * @param  int $value   integer time value
+     * @param  string $unit time unit (e.g. 'min', 'sec', 'weeks')
      * @throws Exception
      * @return string
      */
-    public static function formatHumanReadableTime($time)
+    public static function formatHumanReadableTime(int $value, string $unit): string
     {
-        if (preg_match('/^(\d+) *(\w+)$/', $time, $matches) !== 1) {
-            throw new Exception("Error parsing time format '$time'", 30);
-        }
-        switch ($matches[2]) {
+        switch ($unit) {
             case 'sec':
-                $unit = 'second';
+            case 'second':
+            case 'seconds':
+                $singular = 'second';
                 break;
             case 'min':
-                $unit = 'minute';
+            case 'minute':
+            case 'minutes':
+                $singular = 'minute';
                 break;
             default:
-                $unit = rtrim($matches[2], 's');
+                $singular = rtrim($unit, 's');
         }
-        return I18n::_(array('%d ' . $unit, '%d ' . $unit . 's'), (int) $matches[1]);
+
+        return I18n::_(array('%d ' . $singular, '%d ' . $singular . 's'), $value);
     }
 
     /**
